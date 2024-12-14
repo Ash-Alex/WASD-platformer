@@ -4,9 +4,7 @@ import pygame
 import unittest
 from unittest.mock import patch, MagicMock
 from os.path import join
-from unittest.mock import Mock
-from os import listdir
-from os.path import isfile, join
+from os.path import join
 from tutorial import flip, check_buff_collision, check_fruit_collision, get_block, collide, get_background, handle_vertical_collision, check_mob_collision, WIDTH, HEIGHT, Player, Player_2, Buff, Button, Object, Fruit, Mob
 
 
@@ -43,7 +41,7 @@ class TestCheckBuffCollision(unittest.TestCase):
         player = Player(100, 200, 50, 50)
         player_2 = Player(200, 200, 50, 50)
         
-        buff = Buff(100, 200, 50, 50)
+        buff = Buff(1000, 200, 50, 50)
         objects = [buff]
         
         result = check_buff_collision(player, player_2, objects)
