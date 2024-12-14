@@ -221,14 +221,17 @@ class TestHandleVerticalCollision(unittest.TestCase):
 
     @patch("pygame.sprite.collide_mask")
     def test_handle_vertical_collision_no_collision(self, mock_collide_mask):
-        player = MagicMock()
-        obj1 = MagicMock()
+        player = Player(100, 200, 50, 50)
+        obj1 = Object(100, 400, 50, 50)
 
         mock_collide_mask.return_value = False
 
         objects = [obj1]
         dy = 5
         collided_objects = handle_vertical_collision(player, objects, dy)
+
+        player.landed = MagicMock()
+        player.hit_head = MagicMock()
 
         player.landed.assert_not_called()
         player.hit_head.assert_not_called()
@@ -280,11 +283,11 @@ if __name__ == "__main__":
 
 class TestCheckMobCollision(unittest.TestCase):
     def test_check_mob_collision_positive(self):
-        player = MagicMock()
-        player_2 = MagicMock()
+        player = Player(100, 100, 50, 50)
+        player_2 = Player_2(200, 100, 50, 50)
 
-        mob1 = MagicMock(spec=Mob)
-        mob2 = MagicMock(spec=Mob)
+        mob1 = Mob(100, 200, 50, 50)
+        mob2 = Mob(100, 300, 50, 50)
         objects = [mob1, mob2]
 
         pygame.sprite.collide_mask = MagicMock(side_effect=lambda p, o: o in [mob1, mob2])
@@ -294,11 +297,10 @@ class TestCheckMobCollision(unittest.TestCase):
         self.assertEqual(result, 2)
 
     def test_check_mob_collision_negative(self):
-        player = MagicMock()
-        player_2 = MagicMock()
-
-        mob1 = MagicMock(spec=Mob)
-        mob2 = MagicMock(spec=Mob)
+        player = Player(100, 200, 50, 50)
+        player_2 = Player_2(100, 200, 50, 50)
+        mob1 = Mob(100, 400, 50, 50)
+        mob2 = Mob(100, 500, 50, 50)
         objects = [mob1, mob2]
 
         pygame.sprite.collide_mask = MagicMock(return_value=False)
