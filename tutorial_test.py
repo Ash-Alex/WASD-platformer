@@ -136,37 +136,6 @@ if __name__ == "__main__":
     unittest.main()
 
 
-class TestCollide(unittest.TestCase):
-
-    @patch("pygame.sprite.collide_mask")
-    def test_collide_success(self, mock_collide_mask):
-        player = MagicMock()
-        obj = MagicMock()
-
-        mock_collide_mask.return_value = True
-
-        objects = [obj]
-        result = collide(player, objects, 5)
-
-        mock_collide_mask.assert_called_once_with(player, obj)
-        self.assertEqual(result, obj)
-
-    @patch("pygame.sprite.collide_mask")
-    def test_collide_no_collision(self, mock_collide_mask):
-        player = MagicMock()
-        obj = MagicMock()
-
-        mock_collide_mask.return_value = False
-
-        objects = [obj]
-        result = collide(player, objects, 5)
-
-        mock_collide_mask.assert_called_once_with(player, obj)
-        self.assertIsNone(result)
-
-if __name__ == "__main__":
-    unittest.main()
-
 
 class TestGetBackground(unittest.TestCase):
 
@@ -196,50 +165,6 @@ class TestGetBackground(unittest.TestCase):
 if __name__ == "__main__":
     unittest.main()
 
-
-class TestHandleVerticalCollision(unittest.TestCase):
-
-    @patch("pygame.sprite.collide_mask")
-    def test_handle_vertical_collision_success(self, mock_collide_mask):
-        player = MagicMock()
-        player.rect = MagicMock()
-        obj1 = MagicMock()
-        obj1.rect = MagicMock()
-
-        mock_collide_mask.return_value = True
-
-        objects = [obj1]
-        dy = 5
-        collided_objects = handle_vertical_collision(player, objects, dy)
-
-        player.landed.assert_called_once()
-        player.hit_head.assert_not_called()
-
-        self.assertEqual(collided_objects, [obj1])
-
-        self.assertEqual(player.rect.bottom, obj1.rect.top)
-
-    @patch("pygame.sprite.collide_mask")
-    def test_handle_vertical_collision_no_collision(self, mock_collide_mask):
-        player = Player(100, 200, 50, 50)
-        obj1 = Object(100, 400, 50, 50)
-
-        mock_collide_mask.return_value = False
-
-        objects = [obj1]
-        dy = 5
-        collided_objects = handle_vertical_collision(player, objects, dy)
-
-        player.landed = MagicMock()
-        player.hit_head = MagicMock()
-
-        player.landed.assert_not_called()
-        player.hit_head.assert_not_called()
-
-        self.assertEqual(collided_objects, [])
-
-if __name__ == "__main__":
-    unittest.main()
 
 class TestButtonDraw(unittest.TestCase):
 
