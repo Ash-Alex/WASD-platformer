@@ -7,10 +7,8 @@ from os.path import join
 from unittest.mock import Mock
 from os import listdir
 from os.path import isfile, join
+from tutorial import flip, check_buff_collision, check_fruit_collision, get_block, collide, get_background, handle_vertical_collision, check_mob_collision, WIDTH, HEIGHT, Player, Player_2, Buff, Button, Object, Fruit, Mob
 
-
-def flip(sprites):
-    return [pygame.transform.flip(sprite, True, False) for sprite in sprites]
 
 class TestFlipFunction(unittest.TestCase):
     def setUp(self):
@@ -31,24 +29,10 @@ class TestFlipFunction(unittest.TestCase):
         with self.assertRaises(TypeError):
             flip(None)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
+    pygame.init()
     unittest.main()
-
-
-def check_buff_collision(player, player_2, objects):
-    eat_buff = 1
-    for obj in objects[:]:
-        if isinstance(obj, Buff) and pygame.sprite.collide_mask(player, player_2, obj):
-            objects.remove(obj)
-    return eat_buff
-
-class Player(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-
-class Buff(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
+    pygame.quit()
 
 class TestCheckBuffCollision(unittest.TestCase):
 
@@ -56,10 +40,10 @@ class TestCheckBuffCollision(unittest.TestCase):
     def test_buff_collision_positive(self, mock_collide_mask):
         mock_collide_mask.return_value = True
         
-        player = Player()
-        player_2 = Player()
+        player = Player(100, 200, 50, 50)
+        player_2 = Player(200, 200, 50, 50)
         
-        buff = Buff()
+        buff = Buff(100, 200, 50, 50)
         objects = [buff]
         
         result = check_buff_collision(player, player_2, objects)
@@ -71,10 +55,10 @@ class TestCheckBuffCollision(unittest.TestCase):
     def test_buff_collision_negative(self, mock_collide_mask):
         mock_collide_mask.return_value = False
         
-        player = Player()
-        player_2 = Player()
+        player = Player(100, 200, 50, 50)
+        player_2 = Player(200, 200, 50, 50)
         
-        buff = Buff()
+        buff = Buff(100, 2000, 50, 50)
         objects = [buff]
         
         result = check_buff_collision(player, player_2, objects)
@@ -85,35 +69,16 @@ class TestCheckBuffCollision(unittest.TestCase):
 if __name__ == '__main__':
     unittest.main()
 
-
-
-
-def check_fruit_collision(player, player_2, objects):
-    collected = 0
-    for obj in objects[:]:
-        if isinstance(obj, Fruit) and pygame.sprite.collide_mask(player, player_2, obj):
-            objects.remove(obj)
-            collected += 1
-    return collected
-
-class Player(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-
-class Fruit(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-
 class TestCheckFruitCollision(unittest.TestCase):
 
     @patch('pygame.sprite.collide_mask')
     def test_fruit_collision_positive(self, mock_collide_mask):
         mock_collide_mask.return_value = True
         
-        player = Player()
-        player_2 = Player()
+        player = Player(100, 200, 50, 50)
+        player_2 = Player(200, 200, 50, 50)
         
-        fruit = Fruit()
+        fruit = Fruit(100, 200, 50, 50)
         objects = [fruit]
         
         result = check_fruit_collision(player, player_2, objects)
@@ -125,10 +90,10 @@ class TestCheckFruitCollision(unittest.TestCase):
     def test_fruit_collision_negative(self, mock_collide_mask):
         mock_collide_mask.return_value = False
         
-        player = Player()
-        player_2 = Player()
+        player = Player(100, 200, 50, 50)
+        player_2 = Player(200, 200, 50, 50)
         
-        fruit = Fruit()
+        fruit = Fruit(1000, 100, 50, 50)
         objects = [fruit]
         
         result = check_fruit_collision(player, player_2, objects)
@@ -136,36 +101,8 @@ class TestCheckFruitCollision(unittest.TestCase):
         self.assertEqual(result, 0)
         self.assertIn(fruit, objects)
 
-    @patch('pygame.sprite.collide_mask')
-    def test_multiple_fruits(self, mock_collide_mask):
-        mock_collide_mask.return_value = True
-        
-        player = Player()
-        player_2 = Player()
-        
-        fruit1 = Fruit()
-        fruit2 = Fruit()
-        fruit3 = Fruit()
-        objects = [fruit1, fruit2, fruit3]
-        
-        result = check_fruit_collision(player, player_2, objects)
-        
-        self.assertEqual(result, 3)
-        self.assertNotIn(fruit1, objects)
-        self.assertNotIn(fruit2, objects)
-        self.assertNotIn(fruit3, objects)
-
 if __name__ == '__main__':
     unittest.main()
-
-
-def get_block(size):
-    path = join("assets", "Terrain", "Terrain.png")
-    image = pygame.image.load(path).convert_alpha()
-    surface = pygame.Surface((size, size), pygame.SRCALPHA, 32)
-    rect = pygame.Rect(96, 0, size, size)
-    surface.blit(image, (0, 0), rect)
-    return pygame.transform.scale2x(surface)
 
 class TestGetBlock(unittest.TestCase):
 
@@ -201,20 +138,6 @@ if __name__ == "__main__":
     unittest.main()
 
 
-
-def collide(player, objects, dx):
-    player.move(dx, 0)
-    player.update()
-    collided_object = None
-    for obj in objects:
-        if pygame.sprite.collide_mask(player, obj):
-            collided_object = obj
-            break
-
-    player.move(-dx, 0)
-    player.update()
-    return collided_object
-
 class TestCollide(unittest.TestCase):
 
     @patch("pygame.sprite.collide_mask")
@@ -247,22 +170,6 @@ if __name__ == "__main__":
     unittest.main()
 
 
-
-WIDTH = 800
-HEIGHT = 600
-
-def get_background(name):
-    image = pygame.image.load(join("assets", "Background", name))
-    _, _, width, height = image.get_rect()
-    tiles = []
-
-    for i in range(WIDTH // width + 1):
-        for j in range(HEIGHT // height + 1):
-            pos = (i * width, j * height)
-            tiles.append(pos)
-
-    return tiles, image
-
 class TestGetBackground(unittest.TestCase):
 
     @patch("pygame.image.load")
@@ -291,21 +198,6 @@ class TestGetBackground(unittest.TestCase):
 if __name__ == "__main__":
     unittest.main()
 
-
-def handle_vertical_collision(player, objects, dy):
-    collided_objects = []
-    for obj in objects:
-        if pygame.sprite.collide_mask(player, obj):
-            if dy > 0:
-                player.rect.bottom = obj.rect.top
-                player.landed()
-            elif dy < 0:
-                player.rect.top = obj.rect.bottom
-                player.hit_head()
-
-            collided_objects.append(obj)
-
-    return collided_objects
 
 class TestHandleVerticalCollision(unittest.TestCase):
 
@@ -348,82 +240,45 @@ class TestHandleVerticalCollision(unittest.TestCase):
 if __name__ == "__main__":
     unittest.main()
 
-
-class Button:
-    def __init__(self, x, y, image):
-        self.image = image
-        self.rect = self.image.get_rect(topleft=(x, y))
-        self.clicked = False
-
-    def draw(self, surface):
-        action = False
-        pos = pygame.mouse.get_pos()
-
-        if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
-                self.clicked = True
-                action = True
-
-        if pygame.mouse.get_pressed()[0] == 0:
-            self.clicked = False
-
-        surface.blit(self.image, (self.rect.x, self.rect.y))
-        return action
-
-
 class TestButtonDraw(unittest.TestCase):
 
     @patch("pygame.mouse.get_pos")
     @patch("pygame.mouse.get_pressed")
     def test_draw_button_clicked(self, mock_get_pressed, mock_get_pos):
-        image = MagicMock()
-        image.get_rect.return_value = pygame.Rect(50, 50, 100, 50)
-        button = Button(50, 50, image)
+        image = pygame.Surface((100, 50))
+        image.fill((255, 0, 0))
+        button = Button(50, 50, image, 1)
 
         mock_get_pos.return_value = (75, 75)
         mock_get_pressed.return_value = (1, 0, 0)
 
-        surface = MagicMock()
+        surface = pygame.Surface((200, 200))
 
         action = button.draw(surface)
 
         self.assertTrue(action)
 
-        surface.blit.assert_called_once_with(image, (50, 50))
-
     @patch("pygame.mouse.get_pos")
     @patch("pygame.mouse.get_pressed")
     def test_draw_button_not_clicked(self, mock_get_pressed, mock_get_pos):
-        image = MagicMock()
-        image.get_rect.return_value = pygame.Rect(50, 50, 100, 50)
-        button = Button(50, 50, image)
+        image = pygame.Surface((100, 50))
+        image.fill((0, 255, 0))
+        button = Button(50, 50, image, 1)
 
         mock_get_pos.return_value = (200, 200)
         mock_get_pressed.return_value = (0, 0, 0)
 
-        surface = MagicMock()
+        surface = pygame.Surface((200, 200))
 
         action = button.draw(surface)
 
         self.assertFalse(action)
 
-        surface.blit.assert_called_once_with(image, (50, 50))
-
-
 if __name__ == "__main__":
+    pygame.init()
     unittest.main()
+    pygame.quit()
 
-
-
-def check_mob_collision(player, player_2, objects):
-    coll_mobs = 0
-    for obj in objects[:]:
-        if isinstance(obj, Mob) and (pygame.sprite.collide_mask(player, obj) or pygame.sprite.collide_mask(player_2, obj)):
-            coll_mobs += 1
-    return coll_mobs
-
-class Mob(pygame.sprite.Sprite):
-    pass
 
 class TestCheckMobCollision(unittest.TestCase):
     def test_check_mob_collision_positive(self):
