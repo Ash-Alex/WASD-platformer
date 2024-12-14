@@ -1102,85 +1102,87 @@ skin4_button_2 = Button(850, 380, level44_img, 2)
 
 run_52 = True
 
-while run_52:
-    window.fill("Black")
+if __name__ == "__main__":
+    while run_52:
+        window.fill("Black")
 
-    if skin4_button.draw(window):
-        skin = "VirtualGuy"
-        print(skin)
-    if skin4_button_2.draw(window):
-        skin_2 = "VirtualGuy"
-        print(skin_2)
-    
+        if skin4_button.draw(window):
+            skin = "VirtualGuy"
+            print(skin)
+        if skin4_button_2.draw(window):
+            skin_2 = "VirtualGuy"
+            print(skin_2)
+        
 
-    if skin3_button.draw(window):
-        skin = "PinkMan"
-        print(skin)
-    if skin3_button_2.draw(window):
-        skin_2 = "PinkMan"
-        print(skin_2)
+        if skin3_button.draw(window):
+            skin = "PinkMan"
+            print(skin)
+        if skin3_button_2.draw(window):
+            skin_2 = "PinkMan"
+            print(skin_2)
 
-    if skin1_button.draw(window):
-        skin = "MaskDude"
-        print(skin)
-    if skin1_button_2.draw(window):
-        skin_2 = "MaskDude"
-        print(skin_2)
-    if skin2_button.draw(window):
-        skin = "NinjaFrog"
-        print(skin)
-    if skin2_button_2.draw(window):
-        skin_2 = "NinjaFrog"
-        print(skin_2)
+        if skin1_button.draw(window):
+            skin = "MaskDude"
+            print(skin)
+        if skin1_button_2.draw(window):
+            skin_2 = "MaskDude"
+            print(skin_2)
+        if skin2_button.draw(window):
+            skin = "NinjaFrog"
+            print(skin)
+        if skin2_button_2.draw(window):
+            skin_2 = "NinjaFrog"
+            print(skin_2)
 
-    if level1_button.draw(window):
-        run_game = True
-        while run_game:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    run_game = False
-                    run = False
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
+        if level1_button.draw(window):
+            run_game = True
+            while run_game:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
                         run_game = False
-            pygame.display.update()
+                        run = False
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_ESCAPE:
+                            run_game = False
+                pygame.display.update()
 
-            level1(window)
-            run_game = False
+                level1(window)
+                run_game = False
 
-    if level2_button.draw(window):
-        run_game2 = True
-        while run_game2:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    run_game = False
-                    run = False
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        run_game2 = False
-            pygame.display.update()
+        if level2_button.draw(window):
+            run_game2 = True
+            while run_game2:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        run_game = False
+                        run = False
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_ESCAPE:
+                            run_game2 = False
+                pygame.display.update()
 
-            level2(window)
-            run_game2 = False
+                level2(window)
+                run_game2 = False
 
-    if level3_button.draw(window):
-        run_game3 = True
-        while run_game3:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    run_game = False
-                    run = False
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        run_game3 = False
-            pygame.display.update()
+        if level3_button.draw(window):
+            run_game3 = True
+            while run_game3:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        run_game = False
+                        run = False
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_ESCAPE:
+                            run_game3 = False
+                pygame.display.update()
 
-            level3(window)
-            run_game3 = False
+                level3(window)
+                run_game3 = False
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run_52 = False
-    pygame.display.update()
-pygame.quit()
-quit()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run_52 = False
+        pygame.display.update()
+    pygame.quit()
+    quit()
+    main()
