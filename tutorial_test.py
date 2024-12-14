@@ -34,10 +34,13 @@ if __name__ == '__main__':
 
 class TestCheckBuffCollision(unittest.TestCase):
 
-    @patch('pygame.sprite.collide_mask')
-    def test_buff_collision_positive(self, mock_collide_mask):
-        mock_collide_mask.return_value = True
-        
+    def test_buff_collision_positive(self):
+        def mock_collide_mask(player, obj):
+            return True
+
+        original_collide_mask = pygame.sprite.collide_mask
+        pygame.sprite.collide_mask = mock_collide_mask
+
         player = Player(100, 200, 50, 50)
         player_2 = Player(200, 200, 50, 50)
         
@@ -49,10 +52,15 @@ class TestCheckBuffCollision(unittest.TestCase):
         self.assertEqual(result, 1)
         self.assertNotIn(buff, objects)
 
-    @patch('pygame.sprite.collide_mask')
-    def test_buff_collision_negative(self, mock_collide_mask):
-        mock_collide_mask.return_value = False
-        
+        pygame.sprite.collide_mask = original_collide_mask
+
+    def test_buff_collision_negative(self):
+        def mock_collide_mask(player, obj):
+            return False
+
+        original_collide_mask = pygame.sprite.collide_mask
+        pygame.sprite.collide_mask = mock_collide_mask
+
         player = Player(100, 200, 50, 50)
         player_2 = Player(200, 200, 50, 50)
         
@@ -63,6 +71,7 @@ class TestCheckBuffCollision(unittest.TestCase):
         
         self.assertEqual(result, 1)
         self.assertIn(buff, objects)
+        pygame.sprite.collide_mask = original_collide_mask
 
 if __name__ == '__main__':
     unittest.main()
