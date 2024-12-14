@@ -5,7 +5,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 from os.path import join
 from os.path import join
-from tutorial import flip, check_buff_collision, check_fruit_collision, get_block, collide, get_background, handle_vertical_collision, check_mob_collision, WIDTH, HEIGHT, Player, Player_2, Buff, Button, Object, Fruit, Mob
+from tutorial import flip, check_buff_collision, check_fruit_collision, get_block, get_background, check_mob_collision, WIDTH, HEIGHT, Player, Player_2, Buff, Button, Fruit, Mob
 
 
 class TestFlipFunction(unittest.TestCase):
