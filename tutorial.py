@@ -470,51 +470,6 @@ class Button():
 
 
 
-def check_mob_collision(player, player_2, objects):
-    """
-    Проверяет столкновения игрока с объектами типа Mob. Возвращает количество
-    столкновений с мобами.
-
-    :param player: Объект игрока, с которым проверяются столкновения.
-    :type player: pygame.sprite.Sprite (или объект, поддерживающий метод collide_mask)
-    :param objects: Список объектов, с которыми проверяются столкновения.
-    :type objects: list
-    :returns: Количество столкновений с мобами.
-    :rtype: int
-    :raises TypeError: Если аргумент `objects` не является списком или если элементы 
-        списка не являются объектами класса Mob.
-    :raises AttributeError: Если объекты в списке `objects` не имеют метода `collide_mask`.
-    """
-    coll_mobs = 0
-    for obj in objects[:]:
-        if isinstance(obj, Mob) and (pygame.sprite.collide_mask(player, obj) or pygame.sprite.collide_mask(player_2, obj)):
-            coll_mobs += 1
-    return coll_mobs
-
-
-def check_buff_collision(player, player_2, objects):
-    """
-    Проверяет столкновения игрока с объектами типа Buff. Если столкновение обнаружено,
-    объект типа Buff удаляется из списка объектов. Возвращает значение 1, что означает, что
-    бафф был съеден.
-
-    :param player: Объект игрока, с которым проверяются столкновения.
-    :type player: pygame.sprite.Sprite (или объект, поддерживающий метод `collide_mask`)
-    :param objects: Список объектов, с которыми проверяются столкновения.
-    :type objects: list
-    :returns: Число 1, означающее, что бафф был съеден.
-    :rtype: int
-    :raises TypeError: Если аргумент `objects` не является списком или если элементы 
-        списка не являются объектами класса `Buff`.
-    :raises AttributeError: Если объекты в списке `objects` не имеют метода `collide_mask`.
-    """
-    eat_buff = 1
-    for obj in objects[:]:
-        if isinstance(obj, Buff) and (pygame.sprite.collide_mask(player, obj) or pygame.sprite.collide_mask(player_2, obj)):
-            objects.remove(obj)
-    return eat_buff
-
-
 def get_background(name):
     """
     Загружает изображение фона по имени файла и создает список позиций для его 
@@ -639,29 +594,6 @@ def collide(player, objects, dx):
     player.move(-dx, 0)
     player.update()
     return collided_object
-
-
-def check_fruit_collision(player, player_2, objects):
-    """
-    Проверяет столкновения игрока с объектами типа Fruit. Если столкновение обнаружено,
-    объект типа Fruit удаляется из списка объектов и увеличивается счётчик собранных фруктов.
-
-    :param player: Объект игрока, с которым проверяются столкновения.
-    :type player: pygame.sprite.Sprite (или объект, поддерживающий метод `collide_mask`)
-    :param objects: Список объектов, с которыми проверяются столкновения.
-    :type objects: list
-    :returns: Количество собранных фруктов.
-    :rtype: int
-    :raises TypeError: Если аргумент `objects` не является списком или если элементы 
-        списка не являются объектами класса `Fruit`.
-    :raises AttributeError: Если объекты в списке `objects` не имеют метода `collide_mask`.
-    """
-    collected = 0
-    for obj in objects[:]:
-        if isinstance(obj, Fruit) and (pygame.sprite.collide_mask(player, obj) or pygame.sprite.collide_mask(player_2, obj)):
-            objects.remove(obj)
-            collected += 1
-    return collected
 
 
 def handle_move(player, player_2, objects):
