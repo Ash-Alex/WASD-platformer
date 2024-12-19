@@ -737,6 +737,10 @@ def level1(window):
                 dead_mobs += 1
 
         for obj in objects[:]:
+            if isinstance(obj, Mob) and (pygame.sprite.collide_mask(player, obj)) and buff1 not in objects:
+                coll_mobs += 1
+
+        for obj in objects[:]:
             if isinstance(obj, Buff) and (pygame.sprite.collide_mask(player_2, obj)):
                 objects.remove(obj)
                 eat_buff += 1
@@ -857,6 +861,7 @@ def level2(window):
             if isinstance(obj, Fruit) and (pygame.sprite.collide_mask(player, obj)):
                 objects.remove(obj)
                 fruits_collected += 1
+        
         for obj in objects[:]:
             if isinstance(obj, Mob) and (pygame.sprite.collide_mask(player, obj) or pygame.sprite.collide_mask(player_2, obj)) and buff1 in objects:
                 coll_mobs += 1
@@ -865,6 +870,10 @@ def level2(window):
             if isinstance(obj, Mob) and (pygame.sprite.collide_mask(player_2, obj)) and buff1 not in objects:
                 objects.remove(obj)
                 dead_mobs += 1
+        
+        for obj in objects[:]:
+            if isinstance(obj, Mob) and (pygame.sprite.collide_mask(player, obj)) and buff1 not in objects:
+                coll_mobs += 1
 
         for obj in objects[:]:
             if isinstance(obj, Buff) and (pygame.sprite.collide_mask(player_2, obj)):
@@ -912,7 +921,6 @@ def level3(window):
         for i in range(-WIDTH // block_size, (WIDTH * 4) // block_size)
     ]
 
-    # Платформы
 
     platform4 = Block(block_size * 23, HEIGHT - block_size * 3, block_size)
     platform5 = Block(block_size * 21, HEIGHT - block_size * 5, block_size)
@@ -991,6 +999,10 @@ def level3(window):
             if isinstance(obj, Mob) and (pygame.sprite.collide_mask(player_2, obj)) and buff1 not in objects:
                 objects.remove(obj)
                 dead_mobs += 1
+
+        for obj in objects[:]:
+            if isinstance(obj, Mob) and (pygame.sprite.collide_mask(player, obj)) and buff1 not in objects:
+                coll_mobs += 1
 
         for obj in objects[:]:
             if isinstance(obj, Buff) and (pygame.sprite.collide_mask(player_2, obj)):
